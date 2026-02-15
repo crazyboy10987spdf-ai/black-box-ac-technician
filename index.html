@@ -3,9 +3,9 @@ index.html<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Black Box AIC – Trusted AC Technician for installation, repair, servicing, gas refilling, and AMC in your area. Fast, affordable, and reliable home & commercial AC services.">
-    <meta name="keywords" content="AC technician, AC repair, AC installation, AC servicing, gas refilling, AMC, home AC service, commercial AC service, Black Box AIC">
-    <meta name="author" content="Black Box AIC">
+    <meta name="description" content="Cool Care AC – Trusted AC Technician for installation, repair, servicing, gas refilling, and AMC in your area. Fast, affordable, and reliable home & commercial AC services.">
+    <meta name="keywords" content="AC technician, AC repair, AC installation, AC servicing, gas refilling, AMC, home AC service, commercial AC service, Cool Care AC">
+    <meta name="author" content="Cool Care AC">
     <title>Salman – AC Technician Kanpur| Trusted AC Repair & Service</title>
     <style>
         /* Global Styles */
@@ -45,7 +45,18 @@ index.html<!DOCTYPE html>
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .service-card { background: linear-gradient(180deg, #ffffff, #f1f8e9);
   border-radius: 10px; }
-        .pricing-table { width: 100%; border-collapse: collapse; }
+/* ADD THIS HERE */
+.section{
+border-radius:15px;
+margin:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+.service-card:hover{
+transform:scale(1.05);
+transition:0.3s;
+background:linear-gradient(120deg,#bbdefb,#c8e6c9);
+}
+.pricing-table { width: 100%; border-collapse: collapse; }
         .pricing-table th, .pricing-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         .reviews { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
         .review-card { border: 1px solid #ddd; padding: 20px; border-radius: 5px; max-width: 300px; }
@@ -188,7 +199,55 @@ index.html<!DOCTYPE html>
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
+<!-- Gallery Section -->
+<section id="gallery" class="section" style="background: linear-gradient(120deg,#e1f5fe,#e8f5e9,#fff3e0);">
+    <div class="container">
+        <h2>Our Work Gallery</h2>
+
+        <!-- Photo Upload -->
+        <input type="file" id="photoInput" accept="image/*">
+
+        <!-- Default Images -->
+        <div id="galleryContainer" style="display:flex;flex-wrap:wrap;gap:15px;margin-top:20px;">
+            
+            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" width="250">
+            
+            <img src="https://images.unsplash.com/photo-1603791440384-56cd371ee9a7" width="250">
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Job Vacancy Section -->
+<section id="jobs" class="section" style="background: linear-gradient(120deg,#e3f2fd,#e8f5e9,#fff3e0);">
+<div class="container">
+
+<h2>AC Technician Job Vacancies</h2>
+
+<!-- Add Job Form -->
+<input type="text" id="companyName" placeholder="Company Name">
+
+<input type="text" id="jobTitle" placeholder="Job Title">
+
+<textarea id="jobDesc" placeholder="Job Description"></textarea>
+
+<label>Company Logo:</label>
+<input type="file" id="companyLogo" accept="image/*">
+
+<label>AC Work Photo:</label>
+<input type="file" id="acPhoto" accept="image/*">
+
+<button onclick="addJob()" class="btn">Add Job Vacancy</button>
+
+<hr>
+
+<!-- Job List -->
+<div id="jobContainer"></div>
+
+</div>
+</section>
 
     <!-- Pricing Section -->
     <section id="pricing" class="section">
@@ -339,7 +398,118 @@ loading="lazy" https://maps.app.goo.gl/3mgyG8ZPLjUBoASDA></iframe>
     </footer>
 
     <script>
-        function toggleFAQ(element) {
+function addJob(){
+
+const companyName = document.getElementById("companyName").value;
+
+const jobTitle = document.getElementById("jobTitle").value;
+
+const jobDesc = document.getElementById("jobDesc").value;
+
+const logoFile = document.getElementById("companyLogo").files[0];
+
+const acFile = document.getElementById("acPhoto").files[0];
+
+if(!logoFile || !acFile){
+alert("Please upload company logo and AC photo");
+return;
+}
+
+const reader1 = new FileReader();
+const reader2 = new FileReader();
+
+reader1.onload = function(e1){
+
+reader2.onload = function(e2){
+
+let jobs = JSON.parse(localStorage.getItem("jobs") || "[]");
+
+jobs.push({
+companyName: companyName,
+jobTitle: jobTitle,
+jobDesc: jobDesc,
+logo: e1.target.result,
+acPhoto: e2.target.result
+});
+
+localStorage.setItem("jobs", JSON.stringify(jobs));
+
+loadJobs();
+
+}
+
+reader2.readAsDataURL(acFile);
+
+}
+
+reader1.readAsDataURL(logoFile);
+
+}
+
+
+function loadJobs(){
+
+let jobs = JSON.parse(localStorage.getItem("jobs") || "[]");
+
+const container = document.getElementById("jobContainer");
+
+container.innerHTML = "";
+
+jobs.forEach(job => {
+
+const div = document.createElement("div");
+
+div.innerHTML = `
+
+<div style="
+background:white;
+padding:15px;
+margin:15px 0;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+">
+
+<h3 style="color:#007bff;">${job.companyName}</h3>
+
+<img src="${job.logo}" width="100" style="border-radius:8px;">
+
+<h4>${job.jobTitle}</h4>
+
+<p>${job.jobDesc}</p>
+
+<img src="${job.acPhoto}" width="200" style="border-radius:8px;">
+
+<br><br>
+
+<input placeholder="Your Name">
+
+<input placeholder="Mobile Number">
+
+<input placeholder="Experience">
+
+<button onclick="alert('Application Submitted Successfully')" class="btn">
+Apply Now
+</button>
+
+</div>
+
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+
+// Load jobs on start
+window.onload = function(){
+
+loadJobs();
+
+}
+
+function toggleFAQ(element) {
             const content = element.nextElementSibling;
             content.style.display = content.style.display === 'block' ? 'none' : 'block';
         }
